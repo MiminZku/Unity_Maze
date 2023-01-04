@@ -26,8 +26,9 @@ public class PlayerContoller : MonoBehaviour
         {
             isMove = false;
         }
+        Debug.Log(string.Format("{0} , {1}",h,v));
         gameObject.transform.Translate(new Vector3(h, 0, v)*moveSpeed*Time.deltaTime);
-        gameObject.transform.LookAt(new Vector3(h, 0, v));
+
     }
     
     
