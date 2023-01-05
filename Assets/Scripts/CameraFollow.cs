@@ -15,8 +15,7 @@ public class CameraFollow : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        
+    {       
         gameObject.transform.LookAt(target.transform.position);
 
         if (Input.GetMouseButton(1))
@@ -25,7 +24,7 @@ public class CameraFollow : MonoBehaviour
             Cursor.visible = false;
 
             mouseX = Input.GetAxis("Mouse X");
-            gameObject.transform.RotateAround(target.transform.position, new Vector3(0, mouseX, 0), rotateSpeed *10* Time.deltaTime);
+            gameObject.transform.RotateAround(target.transform.position, new Vector3(0, mouseX * rotateSpeed * Time.deltaTime, 0), 1f);
         }
         else
         {

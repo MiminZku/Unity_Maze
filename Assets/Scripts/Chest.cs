@@ -23,12 +23,6 @@ public class Chest : MonoBehaviour
     }
     public void OpenChest()
     {
-        chestAnimator.SetBool("isLocked", isLocked);
-        Invoke("StopAnimation", 1.3f);
-    }
-
-    void StopAnimation()
-    {
-        chestAnimator.speed = 0;
+        chestAnimator.SetTrigger("openChest");
     }
 }
