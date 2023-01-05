@@ -24,7 +24,7 @@ public class Chest : MonoBehaviour
     public void OpenChest()
     {
         chestAnimator.SetBool("isLocked", isLocked);
-        Invoke("StopAnimation", 1.5f);
+        Invoke("StopAnimation", 1.3f);
     }
 
     void StopAnimation()

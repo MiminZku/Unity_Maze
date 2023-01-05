@@ -21,11 +21,16 @@ public class CameraFollow : MonoBehaviour
 
         if (Input.GetMouseButton(1))
         {
+            Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
             mouseX = Input.GetAxis("Mouse X");
             gameObject.transform.RotateAround(target.transform.position, new Vector3(0, mouseX, 0), rotateSpeed *10* Time.deltaTime);
         }
-        Cursor.visible = true;
-
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 }
