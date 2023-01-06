@@ -8,6 +8,7 @@ TagManager:
   - Key
   - Floor
   - Wall
+  - Hurt
   layers:
   - Default
   - TransparentFX
