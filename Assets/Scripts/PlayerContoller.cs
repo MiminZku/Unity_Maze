@@ -8,8 +8,11 @@ public class PlayerContoller : MonoBehaviour
     public float moveSpeed;
     public float rotateSpeed;
     public Animator animator;
-    public GameObject camera;
+    public GameObject cam;
+    public GameObject interactionText;
+    public GameObject keyIcon;
     public int keyCount;
+    public int hp;
     //public Rigidbody rb;
 
     float h, v;
@@ -26,6 +29,7 @@ public class PlayerContoller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // 마우스 클릭 이벤트
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -40,6 +44,10 @@ public class PlayerContoller : MonoBehaviour
                         if(keyCount > 0)
                         {
                             keyCount--;
+                            if(keyCount == 0)
+                            {
+                                keyIcon.SetActive(false);
+                            }
                             obj.GetComponent<Chest>().OpenLock();
                         }
                     }
@@ -50,10 +58,18 @@ public class PlayerContoller : MonoBehaviour
                 }
             }
         }
+
     }
     private void FixedUpdate()
     {
         Move();
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Key")
+        {
+            interactionText.SetActive(true);
+        }
     }
     private void OnTriggerStay(Collider other)
     {
@@ -66,15 +82,24 @@ public class PlayerContoller : MonoBehaviour
                 Invoke("LetMove", 2);
 
                 keyCount++;
+                keyIcon.SetActive(true);
                 Destroy(other.gameObject);
+                interactionText.SetActive(false);
             }
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.tag == "Key")
+        {
+            interactionText.SetActive(false);
         }
     }
     void Move()
     {
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
-        moveDirection = transform.position - new Vector3(camera.transform.position.x, transform.position.y, camera.transform.position.z);
+        moveDirection = transform.position - new Vector3(cam.transform.position.x, transform.position.y, cam.transform.position.z);
         movement = moveDirection * v + Vector3.Cross(Vector3.up, moveDirection) * h;
         movement = movement.normalized * moveSpeed * Time.deltaTime;
 
