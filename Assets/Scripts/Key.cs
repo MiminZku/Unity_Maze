@@ -18,7 +18,7 @@ public class Key : MonoBehaviour
         gameObject.transform.Rotate(200 * Time.deltaTime, 0 , 0);
         if(isUp)
         {
-            transform.Translate(-Time.deltaTime, 0, 0);
+            transform.Translate(-0.5f*Time.deltaTime, 0, 0);
             if(transform.position.y > 1)
             {
                 isUp= false;
@@ -26,7 +26,7 @@ public class Key : MonoBehaviour
         }
         else
         {
-            transform.Translate(Time.deltaTime, 0, 0);
+            transform.Translate(0.5f*Time.deltaTime, 0, 0);
             if(transform.position.y < 0.5)
             {
                 isUp = true;
