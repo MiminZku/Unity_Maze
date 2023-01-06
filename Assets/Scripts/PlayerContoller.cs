@@ -26,29 +26,6 @@ public class PlayerContoller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        h = Input.GetAxisRaw("Horizontal");
-        v = Input.GetAxisRaw("Vertical");
-        moveDirection = transform.position - new Vector3(camera.transform.position.x, transform.position.y, camera.transform.position.z);
-        movement = moveDirection * v + Vector3.Cross(Vector3.up, moveDirection) * h;
-        movement = movement.normalized * moveSpeed * Time.deltaTime;
-
-        //rb.MovePosition(transform.position + movement);
-        //rb.rotation = Quaternion.Slerp(rb.rotation, lookRotation, rotateSpeed * Time.deltaTime);
-        if (canMove)
-        {
-            transform.position += movement;
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotateSpeed * Time.deltaTime);
-        }
-        if (h != 0 || v != 0)
-        {
-            animator.SetBool("isMove",true);
-            lookRotation = Quaternion.LookRotation(movement);
-        }
-        else
-        {
-            animator.SetBool("isMove", false);
-        }
-
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -72,28 +49,54 @@ public class PlayerContoller : MonoBehaviour
                     }
                 }
             }
-
         }
     }
-    void LetMove()
+    private void FixedUpdate()
     {
-        canMove = true;
+        Move();
     }
- 
     private void OnTriggerStay(Collider other)
     {
-        if(other.tag == "Key")
+        if (other.tag == "Key")
         {
             if (Input.GetKeyDown(KeyCode.F) && canMove)
             {
                 canMove = false;
                 animator.SetTrigger("gathering");
                 Invoke("LetMove", 2);
-               
+
                 keyCount++;
-                Destroy(other.gameObject);                
+                Destroy(other.gameObject);
             }
         }
     }
+    void Move()
+    {
+        h = Input.GetAxisRaw("Horizontal");
+        v = Input.GetAxisRaw("Vertical");
+        moveDirection = transform.position - new Vector3(camera.transform.position.x, transform.position.y, camera.transform.position.z);
+        movement = moveDirection * v + Vector3.Cross(Vector3.up, moveDirection) * h;
+        movement = movement.normalized * moveSpeed * Time.deltaTime;
 
+        //rb.MovePosition(transform.position + movement);
+        //rb.rotation = Quaternion.Slerp(rb.rotation, lookRotation, rotateSpeed * Time.deltaTime);
+        if (canMove)
+        {
+            transform.position += movement;
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotateSpeed * Time.deltaTime);
+        }
+        if (h != 0 || v != 0)
+        {
+            animator.SetBool("isMove", true);
+            lookRotation = Quaternion.LookRotation(movement);
+        }
+        else
+        {
+            animator.SetBool("isMove", false);
+        }
+    }
+    void LetMove()
+    {
+        canMove = true;
+    }
 }

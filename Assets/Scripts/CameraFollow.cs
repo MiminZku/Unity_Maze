@@ -15,7 +15,7 @@ public class CameraFollow : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {       
+    {
         gameObject.transform.LookAt(target.transform.position);
 
         if (Input.GetMouseButton(1))
@@ -24,12 +24,16 @@ public class CameraFollow : MonoBehaviour
             Cursor.visible = false;
 
             mouseX = Input.GetAxisRaw("Mouse X");
-            gameObject.transform.RotateAround(target.transform.position, new Vector3(0, mouseX, 0), 10f * rotateSpeed * Time.deltaTime);
+            gameObject.transform.RotateAround(target.transform.position, target.transform.up, mouseX *10* rotateSpeed*Time.deltaTime);
         }
         else
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+
+    }
+    private void FixedUpdate()
+    {
     }
 }
