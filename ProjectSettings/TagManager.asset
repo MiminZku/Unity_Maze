@@ -9,6 +9,7 @@ TagManager:
   - Floor
   - Wall
   - Hurt
+  - Switch
   layers:
   - Default
   - TransparentFX

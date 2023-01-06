@@ -24,7 +24,5 @@ public class Chest : MonoBehaviour
     public void OpenChest()
     {
         chestAnimator.SetTrigger("openChest");
-        GameManager gameManager = FindObjectOfType<GameManager>();
-        gameManager.GameClear();
     }
 }

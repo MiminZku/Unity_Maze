@@ -6,8 +6,8 @@ public class ArrowSpawner : MonoBehaviour
 {
     public GameObject target;
     public GameObject arrowPrefab;
+    public GameObject lever;
     public Transform arrowSpawnPos;
-    public bool isSwitchOn;
 
     float timeAfterSpawn = 0;
     float spawnRateMin = 0.5f;
@@ -16,7 +16,6 @@ public class ArrowSpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        isSwitchOn = true;
         spawnRate = Random.Range(spawnRateMin, spawnRateMax);
     }
 
@@ -24,14 +23,18 @@ public class ArrowSpawner : MonoBehaviour
     void Update()
     {
         timeAfterSpawn += Time.deltaTime;
-        Vector3 lookPosition = target.transform.position;
-        lookPosition.y = gameObject.transform.position.y;
-        transform.LookAt(lookPosition);
-        if (isSwitchOn && timeAfterSpawn >= spawnRate)
+        if (lever.GetComponent<Switch>().isSwitchOn)
         {
-            spawnRate = Random.Range(spawnRateMin, spawnRateMax);
-            timeAfterSpawn= 0;
-            Shoot();
+            if(timeAfterSpawn >= spawnRate)
+            {
+                Vector3 lookPosition = target.transform.position;
+                lookPosition.y = gameObject.transform.position.y;
+                transform.LookAt(lookPosition);
+
+                spawnRate = Random.Range(spawnRateMin, spawnRateMax);
+                timeAfterSpawn = 0;
+                Shoot();
+            }
         }
     }
 

@@ -7,8 +7,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public GameObject gameClearUIs;
+    public GameObject gameOverUIs;
     public Text besrRecordText;
-    public GameObject inGameUIs;
     public Text timeText;
 
     public GameObject player;
@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isGameClear)
+        if (isGameClear || isGameOver)
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
@@ -46,22 +46,23 @@ public class GameManager : MonoBehaviour
         }
 
     }
-    public void GameOveer()
+    public void GameOver()
     {
         isGameOver = true;
+        gameOverUIs.SetActive(true);
+        besrRecordText.text = "Best Record : " + string.Format("{0:N1}", PlayerPrefs.GetFloat("BestRecord"));
     }
     public void GameClear()
     {
         isGameClear = true;
         gameClearUIs.SetActive(true);
 
-        //float bestTime = PlayerPrefs.GetFloat("BestRecord");
-
-        //if (surviveTime > bestTime)
-        //{
-        //    bestTime = surviveTime;
-        //    PlayerPrefs.SetFloat("BestRecord", bestTime);
-        //}
-        //besrRecordText.text = "Best Record : " + string.Format("{0:N1}", bestTime);
+        float bestTime = PlayerPrefs.GetFloat("BestRecord");
+        if (surviveTime > bestTime)
+        {
+            bestTime = surviveTime;
+            PlayerPrefs.SetFloat("BestRecord", bestTime);
+        }
+        besrRecordText.text = "Best Record : " + string.Format("{0:N1}", bestTime);
     }
 }

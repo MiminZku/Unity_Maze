@@ -12,7 +12,8 @@ public class PlayerContoller : MonoBehaviour
     public GameObject interactionText;
     public GameObject keyIcon;
     public int keyCount;
-    public int hp;
+    public int hp = 3;
+    public GameObject[] heartIcons;
     //public Rigidbody rb;
 
     float h, v;
@@ -54,6 +55,19 @@ public class PlayerContoller : MonoBehaviour
                     else
                     {
                         obj.GetComponent<Chest>().OpenChest();
+                        GameManager gameManager = FindObjectOfType<GameManager>();
+                        gameManager.GameClear();
+                    }
+                }
+                if (obj.tag == "Switch")
+                {
+                    if (obj.GetComponent<Switch>().isSwitchOn)
+                    {
+                        obj.GetComponent<Switch>().OffSwitch();
+                    }
+                    else
+                    {
+                        obj.GetComponent<Switch>().OnSwitch();
                     }
                 }
             }
@@ -95,6 +109,13 @@ public class PlayerContoller : MonoBehaviour
             interactionText.SetActive(false);
         }
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "Hurt" && hp > 0)
+        {
+            Hurt();
+        }
+    }
     void Move()
     {
         h = Input.GetAxisRaw("Horizontal");
@@ -123,5 +144,18 @@ public class PlayerContoller : MonoBehaviour
     void LetMove()
     {
         canMove = true;
+    }
+
+    void Hurt()
+    {
+        hp--;
+        heartIcons[hp].SetActive(false);
+        if (hp == 0)
+        {
+            canMove= false;
+            animator.SetTrigger("die");
+            GameManager gameManager = FindObjectOfType<GameManager>();
+            gameManager.GameOver();
+        }
     }
 }

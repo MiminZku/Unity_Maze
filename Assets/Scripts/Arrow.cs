@@ -15,12 +15,18 @@ public class Arrow : MonoBehaviour
     {
 
     }
-    
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Floor")
+        {
+            Destroy(gameObject);
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player" || other.tag == "Wall" || other.tag=="Floor")
         {
-            Destroy(gameObject);
+            Destroy(gameObject,1);
         }
     }
 }
