@@ -14,10 +14,14 @@ public class PlayerContoller : MonoBehaviour
     public int keyCount;
     public int hp = 3;
     public GameObject[] heartIcons;
+
+    public RaycastHit camToPlayerRay;
+    public bool isRayHit;
     //public Rigidbody rb;
 
     float h, v;
-    bool canMove = true;
+    public bool canMove = true;
+    bool isHurt = false;
     Vector3 moveDirection;
     Vector3 movement;
     Quaternion lookRotation;
@@ -70,9 +74,15 @@ public class PlayerContoller : MonoBehaviour
                         obj.GetComponent<Switch>().OnSwitch();
                     }
                 }
+                if(obj.tag == "FakeWall")
+                {
+                    obj.GetComponent<Rigidbody>().AddForce(-obj.transform.forward,ForceMode.Impulse);
+                }
             }
         }
 
+        // 캐릭터랑 카메라 사이 광선
+        isRayHit = Physics.Raycast(cam.transform.position, transform.position - cam.transform.position, out camToPlayerRay);
     }
     private void FixedUpdate()
     {
@@ -80,31 +90,43 @@ public class PlayerContoller : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Key")
+        if (other.tag == "Key" || other.tag == "Heart")
         {
             interactionText.SetActive(true);
         }
     }
     private void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Key")
+        if (other.tag == "Key" || other.tag == "Heart")
         {
-            if (Input.GetKeyDown(KeyCode.F) && canMove)
+            if (Input.GetKey(KeyCode.F) && canMove)
             {
+                Debug.Log("gathering...");
                 canMove = false;
                 animator.SetTrigger("gathering");
                 Invoke("LetMove", 2);
 
-                keyCount++;
-                keyIcon.SetActive(true);
+                if(other.tag == "Key")
+                {
+                    keyCount++;
+                    keyIcon.SetActive(true);
+                }
+                else
+                {
+                    Heal();
+                }
                 Destroy(other.gameObject);
                 interactionText.SetActive(false);
             }
         }
+        if (other.tag == "Hurt" && hp > 0)
+        {
+            Hurt();
+        }
     }
     private void OnTriggerExit(Collider other)
     {
-        if(other.tag == "Key")
+        if(other.tag == "Key" || other.tag == "Heart")
         {
             interactionText.SetActive(false);
         }
@@ -140,22 +162,46 @@ public class PlayerContoller : MonoBehaviour
         {
             animator.SetBool("isMove", false);
         }
+
     }
     void LetMove()
     {
+        Debug.Log("LetMove");
         canMove = true;
     }
 
     void Hurt()
     {
+        if (isHurt) return;
+        isHurt = true;
+        canMove = false;
+        GetComponent<Rigidbody>().AddForce((-gameObject.transform.forward + Vector3.up) * 20, ForceMode.Impulse);
         hp--;
         heartIcons[hp].SetActive(false);
         if (hp == 0)
         {
-            canMove= false;
             animator.SetTrigger("die");
             GameManager gameManager = FindObjectOfType<GameManager>();
             gameManager.GameOver();
         }
+        else
+        {
+            animator.SetTrigger("getHit");
+            Invoke("LetMove", 0.5f);
+            Invoke("EndHurt", 1f);
+        }
+    }
+    void EndHurt()
+    {
+        isHurt = false;
+    }
+
+    void Heal()
+    {
+        if (hp < 3)
+        {
+            heartIcons[hp++].SetActive(true);
+        }
+
     }
 }

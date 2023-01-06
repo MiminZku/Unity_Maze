@@ -8,13 +8,14 @@ public class GameManager : MonoBehaviour
 {
     public GameObject gameClearUIs;
     public GameObject gameOverUIs;
-    public Text besrRecordText;
+    public GameObject bestRecordText;
     public Text timeText;
 
     public GameObject player;
     public GameObject key;
+    public GameObject healPack;
     public GameObject[] keySpawnSpots;
-    public GameObject[] enemys;
+    public GameObject[] healPackSpots;
     float surviveTime;
     bool isGameClear;
     bool isGameOver;
@@ -25,8 +26,15 @@ public class GameManager : MonoBehaviour
         isGameClear = false;
         isGameOver = false;
 
-        int i = Random.Range(0, 3);
+        int i = Random.Range(0, keySpawnSpots.Length);
         Instantiate(key, keySpawnSpots[i].transform.position, Quaternion.Euler(0,0,-90));
+
+        i = Random.Range(0, healPackSpots.Length);
+        for(int j = 0; j < healPackSpots.Length; j++)
+        {
+            if(j==i) continue;
+            Instantiate(healPack, healPackSpots[j].transform.position, Quaternion.identity);
+        }
     }
 
     // Update is called once per frame
@@ -49,20 +57,22 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         isGameOver = true;
+        float bestRecord = PlayerPrefs.GetFloat("BestRecord");
+        bestRecordText.GetComponent<Text>().text = "Best Record : " + string.Format("{0:N1}", bestRecord);
+        bestRecordText.SetActive(true);
         gameOverUIs.SetActive(true);
-        besrRecordText.text = "Best Record : " + string.Format("{0:N1}", PlayerPrefs.GetFloat("BestRecord"));
     }
     public void GameClear()
     {
         isGameClear = true;
-        gameClearUIs.SetActive(true);
-
         float bestTime = PlayerPrefs.GetFloat("BestRecord");
-        if (surviveTime > bestTime)
+        if (surviveTime < bestTime)
         {
             bestTime = surviveTime;
             PlayerPrefs.SetFloat("BestRecord", bestTime);
         }
-        besrRecordText.text = "Best Record : " + string.Format("{0:N1}", bestTime);
+        bestRecordText.GetComponent<Text>().text = "Best Record : " + string.Format("{0:N1}", bestTime);
+        bestRecordText.SetActive(true);
+        gameClearUIs.SetActive(true);
     }
 }

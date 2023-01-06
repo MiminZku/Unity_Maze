@@ -11,7 +11,7 @@ public class ArrowSpawner : MonoBehaviour
 
     float timeAfterSpawn = 0;
     float spawnRateMin = 0.5f;
-    float spawnRateMax = 3f;
+    float spawnRateMax = 2f;
     float spawnRate;
     // Start is called before the first frame update
     void Start()

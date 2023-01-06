@@ -10,6 +10,8 @@ TagManager:
   - Wall
   - Hurt
   - Switch
+  - FakeWall
+  - Heart
   layers:
   - Default
   - TransparentFX
