@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     float surviveTime;
     bool isGameClear;
     bool isGameOver;
+    float bestRecord;
     // Start is called before the first frame update
     void Start()
     {
@@ -62,7 +63,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         isGameOver = true;
-        float bestRecord = PlayerPrefs.GetFloat("BestRecord");
+        bestRecord = PlayerPrefs.GetFloat("BestRecord");
         bestRecordText.GetComponent<Text>().text = "Best Record : " + string.Format("{0:N1}", bestRecord);
         bestRecordText.SetActive(true);
         gameOverUIs.SetActive(true);
@@ -73,17 +74,29 @@ public class GameManager : MonoBehaviour
     public void GameClear()
     {
         isGameClear = true;
-        float bestTime = PlayerPrefs.GetFloat("BestRecord");
-        if (surviveTime < bestTime)
+        if (PlayerPrefs.HasKey("BestRecord"))
         {
-            bestTime = surviveTime;
-            PlayerPrefs.SetFloat("BestRecord", bestTime);
+            bestRecord = PlayerPrefs.GetFloat("BestRecord");
         }
-        bestRecordText.GetComponent<Text>().text = "Best Record : " + string.Format("{0:N1}", bestTime);
-        bestRecordText.SetActive(true);
-        gameClearUIs.SetActive(true);
+        else
+        {
+            bestRecord = surviveTime;
+            PlayerPrefs.SetFloat("BestRecord", bestRecord);
+        }
+        if (surviveTime < bestRecord)
+        {
+            bestRecord = surviveTime;
+            PlayerPrefs.SetFloat("BestRecord", bestRecord);
+        }
+        bestRecordText.GetComponent<Text>().text = "Best Record : " + string.Format("{0:N1}", bestRecord);
+        Invoke("ShowUI", 1f);
         bgmAudioSource.Pause();
         soundEffectsSource.clip = gameClearSound;
         soundEffectsSource.Play();
+    }
+    void ShowUI()
+    {
+        bestRecordText.SetActive(true);
+        gameClearUIs.SetActive(true);
     }
 }

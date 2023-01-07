@@ -20,6 +20,7 @@ public class Chest : MonoBehaviour
     {
         isLocked = false;
         transform.GetChild(0).gameObject.SetActive(isLocked);
+        GetComponent<AudioSource>().Play();
     }
     public void OpenChest()
     {
