@@ -12,6 +12,7 @@ TagManager:
   - Switch
   - FakeWall
   - Heart
+  - Button
   layers:
   - Default
   - TransparentFX

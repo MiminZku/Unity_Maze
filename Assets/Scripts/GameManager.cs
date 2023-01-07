@@ -29,10 +29,10 @@ public class GameManager : MonoBehaviour
         int i = Random.Range(0, keySpawnSpots.Length);
         Instantiate(key, keySpawnSpots[i].transform.position, Quaternion.Euler(0,0,-90));
 
-        i = Random.Range(0, healPackSpots.Length);
+        /*i = Random.Range(0, healPackSpots.Length);*/
         for(int j = 0; j < healPackSpots.Length; j++)
         {
-            if(j==i) continue;
+            /*if(j==i) continue;*/
             Instantiate(healPack, healPackSpots[j].transform.position, Quaternion.identity);
         }
     }
