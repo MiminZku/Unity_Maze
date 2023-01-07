@@ -32,6 +32,7 @@ public class FloorTrap : MonoBehaviour
         if (isUp) return;
         isUp = true;
         transform.position = transform.position + new Vector3(0, 1, 0);
+        GetComponent<AudioSource>().Play();
         if (isAuto)
         {
             Invoke("Down", 1);

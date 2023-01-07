@@ -16,6 +16,11 @@ public class GameManager : MonoBehaviour
     public GameObject healPack;
     public GameObject[] keySpawnSpots;
     public GameObject[] healPackSpots;
+    public AudioSource bgmAudioSource;
+    public AudioSource soundEffectsSource;
+    public AudioClip gameClearSound;
+    public AudioClip gameOverSound;
+
     float surviveTime;
     bool isGameClear;
     bool isGameOver;
@@ -61,6 +66,9 @@ public class GameManager : MonoBehaviour
         bestRecordText.GetComponent<Text>().text = "Best Record : " + string.Format("{0:N1}", bestRecord);
         bestRecordText.SetActive(true);
         gameOverUIs.SetActive(true);
+        bgmAudioSource.Pause();
+        soundEffectsSource.clip = gameOverSound;
+        soundEffectsSource.Play();
     }
     public void GameClear()
     {
@@ -74,5 +82,8 @@ public class GameManager : MonoBehaviour
         bestRecordText.GetComponent<Text>().text = "Best Record : " + string.Format("{0:N1}", bestTime);
         bestRecordText.SetActive(true);
         gameClearUIs.SetActive(true);
+        bgmAudioSource.Pause();
+        soundEffectsSource.clip = gameClearSound;
+        soundEffectsSource.Play();
     }
 }

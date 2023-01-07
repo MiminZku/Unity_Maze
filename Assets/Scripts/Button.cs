@@ -5,10 +5,13 @@ using UnityEngine;
 public class Button : MonoBehaviour
 {
     public GameObject[] floorTrap;
+    public AudioClip pressSound;
+    public AudioClip releaseSound;
+    AudioSource audioSource;
     // Start is called before the first frame update
     void Start()
     {
-        
+        audioSource= GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -19,6 +22,8 @@ public class Button : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        audioSource.clip = pressSound;
+        audioSource.Play();
         if(other.tag == "Player")
         {
             transform.position += new Vector3(0, -0.09f, 0);
@@ -38,6 +43,8 @@ public class Button : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
+        audioSource.clip = releaseSound;
+        audioSource.Play();
         transform.position += new Vector3(0, 0.09f, 0);
     }
 }

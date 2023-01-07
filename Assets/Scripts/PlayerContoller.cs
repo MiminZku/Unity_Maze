@@ -15,6 +15,10 @@ public class PlayerContoller : MonoBehaviour
     public int hp = 3;
     public GameObject[] heartIcons;
 
+    public AudioClip hitSound;
+    public AudioClip getItemSound;
+    public AudioClip healSound;
+
     public RaycastHit camToPlayerRay;
     public bool isRayHit;
     //public Rigidbody rb;
@@ -25,10 +29,12 @@ public class PlayerContoller : MonoBehaviour
     Vector3 moveDirection;
     Vector3 movement;
     Quaternion lookRotation;
+    AudioSource audioSource;
     // Start is called before the first frame update
     void Start()
     {
         lookRotation= transform.rotation;
+        audioSource= GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -76,7 +82,7 @@ public class PlayerContoller : MonoBehaviour
                 }
                 if(obj.tag == "FakeWall")
                 {
-                    obj.GetComponent<Rigidbody>().AddForce(-obj.transform.forward,ForceMode.Impulse);
+                    obj.GetComponent<Rigidbody>().AddForce(-1000*obj.transform.forward,ForceMode.Impulse);
                 }
             }
         }
@@ -110,6 +116,8 @@ public class PlayerContoller : MonoBehaviour
                 {
                     keyCount++;
                     keyIcon.SetActive(true);
+                    audioSource.clip = getItemSound;
+                    audioSource.Play();
                 }
                 else
                 {
@@ -190,6 +198,8 @@ public class PlayerContoller : MonoBehaviour
             Invoke("LetMove", 0.5f);
             Invoke("EndHurt", 1f);
         }
+        audioSource.clip = hitSound;
+        audioSource.Play();
     }
     void EndHurt()
     {
@@ -202,6 +212,7 @@ public class PlayerContoller : MonoBehaviour
         {
             heartIcons[hp++].SetActive(true);
         }
-
+        audioSource.clip = healSound;
+        audioSource.Play();
     }
 }
