@@ -12,8 +12,8 @@ public class MazeGenerator : MonoBehaviour
     public GameObject[] floors;
     public GameObject[] walls;
 
-    public static int rowNum = 10;
-    public static int colNum = 10;
+    public int rowNum;
+    public int colNum;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +29,8 @@ public class MazeGenerator : MonoBehaviour
                 break;
             }
         }
-        /*for(int i = 0; i< rowNum; i++)
+        Build(maze);
+        /*for (int i = 0; i < rowNum; i++)
         {
             string temp = " ";
             for (int j = 0; j < colNum; j++)
@@ -46,7 +47,7 @@ public class MazeGenerator : MonoBehaviour
         
     }
 
-    static bool FindPath(int[][] maze, int row, int col)
+    bool FindPath(int[][] maze, int row, int col)
     {
         if (row == rowNum-1 && col == colNum-1)
         {
@@ -70,7 +71,7 @@ public class MazeGenerator : MonoBehaviour
         return false;
     }
 
-    static int[][] GenerateMaze()
+    int[][] GenerateMaze()
     {
         int[][] maze = new int[rowNum][];
         for (int i = 0; i < colNum; i++)
@@ -112,6 +113,50 @@ public class MazeGenerator : MonoBehaviour
 
     void Build(int[][] maze)
     {
-
+        int floorCount = 0;
+        int wallCount = 0;
+        for (int row = 0; row < rowNum; row++)
+        {
+            for (int col = 0; col < colNum; col++)
+            {
+                if(row % 2 == 0)
+                {
+                    if(col % 2 == 0)
+                    {
+                        floors[floorCount].SetActive(true);
+                        if (maze[row][col] == 2)
+                        {
+                            floors[floorCount].GetComponent<Renderer>().material.color = Color.green;
+                        }
+                        floorCount++;
+                    }
+                    else
+                    {
+                        if (maze[row][col] == 1)
+                        {
+                            walls[wallCount++].SetActive(true);
+                        }
+                        else
+                        {
+                            walls[wallCount++].SetActive(false);
+                        }
+                    }
+                }
+                else
+                {
+                    if (col % 2 == 0)
+                    {
+                        if (maze[row][col] == 1)
+                        {
+                            walls[wallCount++].SetActive(true);
+                        }
+                        else
+                        {
+                            walls[wallCount++].SetActive(false);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
